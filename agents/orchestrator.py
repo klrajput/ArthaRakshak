@@ -15,7 +15,7 @@ NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
 
 class Orchestrator:
     """
-    Master coordinator for EnterpriseGuard AI.
+    Master coordinator for ArthaRakshak.
 
     Creates ONE shared NVIDIA API client and passes it to all AI agents.
     Logs every agent decision with a timestamp for the audit trail.

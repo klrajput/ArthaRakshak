@@ -10,8 +10,9 @@
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.43-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![NVIDIA](https://img.shields.io/badge/NVIDIA-LLaMA--3.1--70B-76B900?style=for-the-badge&logo=nvidia&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-**ET AI Hackathon 2026 · Enterprise Cost Optimization**
+**ET AI Hackathon 2026 · Track 3 · Enterprise Cost Optimization**
 
 </div>
 
@@ -564,7 +565,7 @@ Required pace : 3.5 tasks/day  ← 3× faster needed
 
 ## 📄 License
 
-This project is made for ET AI Hackathon 2026
+MIT License — see `LICENSE` file for details.
 
 ---
 

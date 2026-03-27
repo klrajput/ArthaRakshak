@@ -11,14 +11,14 @@ load_dotenv()
 
 # ─── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="EnterpriseGuard AI",
+    page_title="ArthaRakshak",
     page_icon="🛡️",
     layout="wide",
 )
 
 # ─── Sidebar ──────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.title("🛡️ EnterpriseGuard AI")
+    st.title("🛡️ ArthaRakshak")
     st.caption("Enterprise Cost Intelligence System")
     st.divider()
 
