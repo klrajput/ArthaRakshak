@@ -565,7 +565,7 @@ Required pace : 3.5 tasks/day  ← 3× faster needed
 
 ## 📄 License
 
-MIT License — see `LICENSE` file for details.
+This project is made for ET AI Hackathon 2026
 
 ---
 
