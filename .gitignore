@@ -1,0 +1,33 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environments
+.env
+.env.*
+.venv/
+venv/
+
+# Build / packaging
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+.vscode/
+
+# Data uploads
+*.csv
+*.parquet
+
+# Streamlit state
+.streamlit/
