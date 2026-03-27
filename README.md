@@ -99,73 +99,24 @@ The diagram below shows how the **entire application** works — from user uploa
 
 ```mermaid
 flowchart LR
-    %% Lane headers
-    USER(["👤 User\n(Browser)"])
+    USER[User]
+    UI[Streamlit UI]
+    ORCH[Orchestrator]
+    VP[Vendor pipeline]
+    SP[SLA pipeline]
+    NVIDIA[NVIDIA API]
+    RESULTS[Results]
 
-    subgraph UI["🖥️  Streamlit UI — app.py"]
-        direction TB
-        TAB1["📊 Dashboard\nMetrics · Charts · Audit Log"]
-        TAB2["🔍 Vendor Dedup\nCSV Upload · Run"]
-        TAB3["⏰ SLA Risk\nCSV Upload · Params · Run"]
-    end
-
-    subgraph ORCH["🤖 Orchestrator"]
-        direction TB
-        O1["Create NVIDIA client\n(shared)"]
-        O2["Route to pipeline"]
-        O3["Append audit_log[]"]
-    end
-
-    subgraph VP["📦 Vendor Pipeline"]
-        direction TB
-        V1["ScannerAgent\nFuzzy dedup (cleaned names)"]
-        V2["FinanceAgent\nSavings math · 70% recovery"]
-        V3["AdvisorAgent\nLLM action plan"]
-    end
-
-    subgraph SP["📦 SLA Pipeline"]
-        direction TB
-        S1["TrackerAgent\nPace + bottlenecks"]
-        S2["RiskAgent\nMiss days + penalty"]
-        S3["RecoveryAgent\nLLM plan + email"]
-    end
-
-    NVIDIA["☁️ NVIDIA API\nmeta/llama-3.1-70b-instruct"]
-
-    RESULTS["📤 Results\nDup groups · Savings\nRisk level · Recovery plan\nEscalation email · Audit log"]
-
-    %% Flow lines
-    USER -->|"Upload CSV + API key"| UI
-    TAB2 -->|"vendors df"| ORCH
-    TAB3 -->|"tasks df + SLA params"| ORCH
-    ORCH --> O1 --> O2 --> O3
-
-    O2 -->|"Vendor path"| VP
-    V1 -->|"duplicate groups"| V2 -->|"groups + savings"| V3
-    V3 <-->|"REST call"| NVIDIA
-
-    O2 -->|"SLA path"| SP
-    S1 -->|"tracking dict"| S2 -->|"risk dict"| S3
-    S3 <-->|"REST call ×2"| NVIDIA
-
-    VP -->|"results dict"| RESULTS
-    SP -->|"results dict"| RESULTS
-    RESULTS --> TAB1
-    RESULTS --> TAB2
-    RESULTS --> TAB3
-
-    %% Styles
-    classDef lane fill:#0f1b2d,stroke:#0f1b2d,color:#e5ecf4,font-weight:bold,rx:8,ry:8;
-    classDef orch fill:#185FA5,stroke:#0f1b2d,color:#fff,font-weight:bold,rx:8,ry:8;
-    classDef llm fill:#76B900,stroke:#4a7a00,color:#fff,font-weight:bold,rx:8,ry:8;
-    classDef output fill:#f0f4f8,stroke:#0f1b2d,color:#0f1b2d,rx:8,ry:8;
-
-    class UI lane;
-    class ORCH O1 O2 O3 orch;
-    class VP V1 V2 orch;
-    class SP S1 S2 orch;
-    class V3 S3 NVIDIA llm;
-    class RESULTS output;
+    USER --> UI
+    UI -->|Vendor CSV| ORCH
+    UI -->|Task CSV + params| ORCH
+    ORCH -->|Call vendor agents| VP
+    ORCH -->|Call SLA agents| SP
+    VP -->|Action plan + savings| RESULTS
+    SP -->|Risk + recovery| RESULTS
+    VP --> NVIDIA
+    SP --> NVIDIA
+    RESULTS --> UI
 ```
 
 ---
@@ -180,45 +131,16 @@ Large enterprises often onboard the same vendor multiple times under slightly di
 
 ```mermaid
 flowchart LR
-    %% Nodes
-    CSV(["📄 vendors.csv\nvendor_id · vendor_name\nservice_category · annual_spend"])
+    CSV[vendors.csv]
+    SCAN[ScannerAgent
+clean names + fuzzy match]
+    FIN[FinanceAgent
+compute savings]
+    ADV[AdvisorAgent
+LLM action plan]
+    OUT[duplicate_groups + savings + plan]
 
-    subgraph SCAN["1️⃣  ScannerAgent  (Pure Python)"]
-        SC1["Load vendor names"]
-        SC2["_clean_name()\n↓ lowercase\n↓ strip punctuation\n↓ remove NOISE_WORDS\n(ltd, pvt, india, technologies …)"]
-        SC3["Pairwise fuzzy compare\nfuzz.token_sort_ratio()\non CLEANED names"]
-        SC4{"score ≥ 85?"}
-        SC5["Group as duplicates\n+ track best_score"]
-        SC6["Return List[Dict]\ncanonical_name · vendors[]\nsimilarity_score · count"]
-    end
-
-    subgraph FIN["2️⃣  FinanceAgent  (Pure Python)"]
-        F1["For each group:\nΣ spend → total_spend\nmax spend → primary_spend"]
-        F2["duplicate_spend =\ntotal_spend − primary_spend"]
-        F3["savings =\nduplicate_spend × 0.70"]
-        F4["Sort groups by\nsavings DESC"]
-    end
-
-    subgraph ADV["3️⃣  AdvisorAgent  (NVIDIA LLaMA)"]
-        A1["Format top-6 groups\ninto structured prompt"]
-        A2["POST → NVIDIA API\nmodel: llama-3.1-70b-instruct\ntemp: 0.4 · max_tokens: 900"]
-        A3["Return 3-section action plan\n• Immediate (this week)\n• 30-Day Actions\n• Process Improvements"]
-    end
-
-    OUT(["📤 Output\n• duplicate_groups[]\n• total_savings Rs\n• action_plan text\n• audit_log[]"])
-
-    %% Flows
-    CSV --> SCAN
-    SC1 --> SC2 --> SC3 --> SC4
-    SC4 -->|"Yes"| SC5 --> SC6
-    SC4 -->|"No"| SC3
-    SC6 --> FIN
-    F1 --> F2 --> F3 --> F4 --> ADV
-    A1 --> A2 --> A3 --> OUT
-
-    %% Styles
-    classDef llm fill:#76B900,stroke:#4a7a00,color:#fff,font-weight:bold;
-    class ADV A2 llm;
+    CSV --> SCAN --> FIN --> ADV --> OUT
 ```
 
 ### The Name Cleaning Logic
@@ -264,49 +186,16 @@ Project teams often discover SLA breaches only after they've happened, by which 
 
 ```mermaid
 flowchart LR
-    %% Inputs
-    CSV(["📄 tasks.csv\ntask_id · task_name · status\nassigned_to · priority · blocker\ndays_elapsed"])
-    PARAMS(["⚙️ SLA Parameters\ncontract_tasks\ndays_remaining\npenalty_per_day Rs"])
+    TASKS[tasks.csv + SLA params]
+    TRACK[TrackerAgent
+pace + bottlenecks]
+    RISK[RiskAgent
+miss days + penalty]
+    RECOVERY[RecoveryAgent
+plan + escalation email]
+    OUT[risk_level + recovery + email]
 
-    subgraph TRK["1️⃣  TrackerAgent  (Pure Python)"]
-        T1["Count by status\nCompleted · In Progress · Pending"]
-        T2["current_rate =\ntasks_completed ÷ days_elapsed\n(weighted avg)"]
-        T3["required_rate =\ntasks_remaining ÷ days_remaining"]
-        T4["Find bottlenecks\nblocker not null/None/empty"]
-        T5["Return tracking dict\nrates · counts · bottlenecks · assignees"]
-    end
-
-    subgraph RISK["2️⃣  RiskAgent  (Pure Python)"]
-        R1["days_needed =\ntasks_remaining ÷ current_rate"]
-        R2["predicted_miss_days =\nmax(0, days_needed − days_remaining)"]
-        R3["financial_risk =\npredicted_miss_days × penalty_per_day"]
-        R4{"miss_days?"}
-        R5["🔴 HIGH\n> 3 days"]
-        R6["🟡 MEDIUM\n1–3 days"]
-        R7["🟢 LOW\n0 days"]
-    end
-
-    subgraph REC["3️⃣  RecoveryAgent  (NVIDIA LLaMA ×2)"]
-        RC1["Call 1: Recovery Plan\nPrompt: risk data + bottlenecks\n+ assignee names"]
-        RC2["Call 2: Escalation Email\nPrompt: miss days + penalty + blockers"]
-    end
-
-    OUT(["📤 Output\n• risk_level (HIGH/MEDIUM/LOW)\n• predicted_miss_days\n• financial_risk Rs\n• recovery_plan text\n• escalation_email text\n• bottlenecks[]\n• audit_log[]"])
-
-    %% Flows
-    CSV --> TRK
-    PARAMS --> TRK
-    T1 --> T2 --> T3 --> T4 --> T5 --> RISK
-    R1 --> R2 --> R3 --> R4
-    R4 -->|"> 3"| R5
-    R4 -->|"1–3"| R6
-    R4 -->|"0"| R7
-    R5 & R6 & R7 --> REC
-    RC1 --> RC2 --> OUT
-
-    %% Styles
-    classDef llm fill:#76B900,stroke:#4a7a00,color:#fff,font-weight:bold;
-    class REC RC1 RC2 llm;
+    TASKS --> TRACK --> RISK --> RECOVERY --> OUT
 ```
 
 ### Risk Calculation
