@@ -11,7 +11,7 @@
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.43-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![NVIDIA](https://img.shields.io/badge/NVIDIA-LLaMA--3.1--70B-76B900?style=for-the-badge&logo=nvidia&logoColor=white)
 
-**ET AI Hackathon 2026 · Track 3 · Enterprise Cost Optimization**
+**ET AI Hackathon 2026 · Enterprise Cost Optimization**
 
 </div>
 
