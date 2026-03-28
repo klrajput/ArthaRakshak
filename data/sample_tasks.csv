@@ -1,0 +1,21 @@
+task_id,task_name,assigned_to,status,days_estimated,days_elapsed,blocker,priority
+T001,API Integration,Ramesh Kumar,Completed,5,6,None,High
+T002,Database Design,Priya Sharma,Completed,3,3,None,High
+T003,User Authentication,Amit Singh,Completed,4,5,None,High
+T004,Payment Gateway,Ramesh Kumar,Completed,6,8,None,Critical
+T005,Frontend Dashboard,Neha Gupta,Completed,5,5,None,Medium
+T006,Report Generation,Priya Sharma,Completed,3,4,None,Medium
+T007,Email Notifications,Amit Singh,Completed,2,3,None,Low
+T008,Mobile Design,Neha Gupta,Completed,4,6,None,Medium
+T009,Data Export,Ramesh Kumar,In Progress,3,2,None,High
+T010,Security Audit,Priya Sharma,In Progress,5,1,Waiting for security team credentials,Critical
+T011,Performance Tuning,Amit Singh,In Progress,4,3,None,High
+T012,API Documentation,Neha Gupta,Pending,2,0,None,Low
+T013,Load Testing,Ramesh Kumar,Pending,3,0,Ramesh on leave until April 2,High
+T014,User Acceptance Testing,Priya Sharma,Pending,4,0,Blocked by T010 completion,Critical
+T015,Deployment Pipeline,Amit Singh,Pending,3,0,None,High
+T016,Backup Setup,Neha Gupta,Pending,2,0,None,Medium
+T017,SSO Integration,Ramesh Kumar,Pending,5,0,Ramesh on leave until April 2,Critical
+T018,Audit Log Feature,Priya Sharma,Pending,3,0,Waiting for T014 sign-off,High
+T019,Multi-language Support,Amit Singh,Pending,4,0,None,Low
+T020,Final QA Testing,Neha Gupta,Pending,5,0,None,Critical

@@ -25,9 +25,9 @@ build/
 .DS_Store
 .vscode/
 
-# Data uploads
-*.csv
-*.parquet
+# Data uploads (keep sample data tracked)
+# *.csv
+# *.parquet
 
 # Streamlit state
 .streamlit/

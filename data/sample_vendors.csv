@@ -1,0 +1,21 @@
+vendor_id,vendor_name,service_category,annual_spend,contact_email
+V001,Tata Consultancy Services,IT Consulting,5200000,billing@tcs.com
+V002,TCS India Pvt Ltd,IT Consulting,1800000,info@tcsindia.com
+V003,Tata Consulting Ltd,IT Consulting,650000,vendor@tataconsulting.com
+V004,Infosys Limited,Software Development,3400000,vendor@infosys.com
+V005,Infosys Technologies,Software Development,900000,accounts@infosytech.com
+V006,Infosys India,Software Development,320000,india@infosys.in
+V007,Wipro Technologies,Cloud Services,2100000,wipro@wipro.com
+V008,WIPRO Ltd,Cloud Services,750000,accounts@wipro-ltd.com
+V009,Amazon Web Services,Cloud Infrastructure,4500000,aws@amazon.com
+V010,AWS India,Cloud Infrastructure,1200000,billing@awsindia.com
+V011,Microsoft Corporation,Software Licensing,2800000,msft@microsoft.com
+V012,Microsoft India Pvt,Software Licensing,600000,india@msftindia.com
+V013,Zoho Corporation,CRM Software,480000,billing@zoho.com
+V014,Zoho India,CRM Software,180000,accounts@zohoindia.com
+V015,HCL Technologies,IT Support,1600000,hcl@hcl.com
+V016,HCL Tech Pvt Ltd,IT Support,420000,billing@hcltech.com
+V017,Adobe Systems Inc,Design Software,900000,adobe@adobe.com
+V018,Adobe India Pvt Ltd,Design Software,280000,india@adobe.com
+V019,Salesforce Inc,CRM Platform,2200000,billing@salesforce.com
+V020,Salesforce India,CRM Platform,480000,india@salesforce.com

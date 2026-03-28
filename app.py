@@ -3,11 +3,13 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # python-dotenv not needed on Streamlit Cloud
 
 from agents.orchestrator import Orchestrator
-
-load_dotenv()
 
 # ─── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -22,10 +24,16 @@ with st.sidebar:
     st.caption("Enterprise Cost Intelligence System")
     st.divider()
 
-    # Paste your NVIDIA API key here — or set NVIDIA_API_KEY in your .env file
+    # Load from Streamlit secrets (cloud) or env var (local)
+    default_key = ""
+    try:
+        default_key = st.secrets["NVIDIA_API_KEY"]
+    except (KeyError, FileNotFoundError):
+        default_key = os.getenv("NVIDIA_API_KEY", "")
+
     api_key = st.text_input(
         "NVIDIA API Key",
-        value=os.getenv("NVIDIA_API_KEY", ""),
+        value=default_key,
         type="password",
         help="Get your key at build.nvidia.com → API Catalog",
     )
